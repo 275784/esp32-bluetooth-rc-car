@@ -11,13 +11,12 @@ The system also includes a custom PCB, power distribution, battery status indica
 ## Features
 
 - Xbox controller input over Bluetooth
-- ESP32-based control
+- ESP32-based control system
 - Brushless motor control through ESC
 - Servo-based steering
 - Progressive acceleration (Soft Start)
 - Safe direction switching through neutral
-- Trigger and steering dead zones
-- Run / Stop mode
+- Run / Stop functionality
 - Normal and Sport driving modes
 - Battery voltage indication
 - Custom PCB
@@ -51,13 +50,11 @@ LiPo Battery
 
 ## How It Works
 
-1. The Xbox controller connects to the ESP32 using Bluetooth.
-2. The ESP32 reads trigger, button and joystick inputs.
-3. Throttle input is converted into a PWM signal for the ESC.
-4. The steering axis is mapped to the steering servo position.
-5. The battery status is monitored by the analog voltage indicator.
-6. The firmware continuously updates motor and steering outputs.
-7. If the controller connection is lost, the system immediately returns to a safe state.
+1. The Xbox controller connects to the ESP32 over Bluetooth.
+2. The ESP32 reads the controller inputs and processes the commands.
+3. Throttle and steering inputs are converted into PWM signals for the ESC and steering servo.
+4. The battery voltage is indicated by a dedicated analog LED circuit.
+5. If the Bluetooth connection is lost, the vehicle returns to a safe state.
 
 ## Hardware
 
@@ -82,7 +79,7 @@ LiPo Battery
 
 ## Motor Control
 
-The ESC operates using a 50 Hz PWM signal.
+The brushless motor is controlled through an Electronic Speed Controller (ESC) using a 50 Hz PWM signal.
 
 The firmware uses:
 
@@ -95,17 +92,15 @@ Two driving modes are available:
 - **Normal**
 - **Sport**
 
-The throttle input is processed using a dead zone and mapped to the corresponding PWM range.
-
-A progressive acceleration mechanism limits how quickly the PWM command changes.
+A Soft Start mechanism limits the rate at which the motor command increases.
 
 ## Steering Control
 
 Steering is controlled using the horizontal axis of the Xbox controller.
 
-A configurable dead zone prevents small joystick movements from causing unwanted steering.
+A configurable dead zone prevents unwanted steering caused by small joystick movements.
 
-The steering angle is smoothly adjusted toward the target position.
+The joystick input is mapped to the steering servo PWM range for proportional steering control.
 
 ## Safety Features
 
@@ -121,14 +116,9 @@ The firmware includes several mechanisms designed to prevent uncontrolled moveme
 
 ## Hardware Design
 
-The project includes a custom PCB integrating:
+The project includes a custom PCB integrating the ESP32, ESC interface, steering servo interface, power distribution and analog battery voltage indicator.
 
-- ESP32
-- ESC interface
-- servo interface
-- power distribution
-- XL4015 step-down converter
-- analog battery voltage indicator
+The PCB was designed in KiCad and the battery voltage indicator was analyzed in LTspice.
 
 ### PCB Design
 
@@ -145,6 +135,14 @@ The battery voltage indicator was designed and analyzed in LTspice.
 The simulation was used to analyze the voltage thresholds and LED current characteristics of the indicator circuit.
 
 ![LED Current Characteristics](hardware/ltspice/led-current-characteristics.png)
+
+### Design Files
+
+- [KiCad PCB project](hardware/kicad/rc-car.kicad_pcb)
+- [KiCad schematic](hardware/kicad/rc-car.kicad_sch)
+- [KiCad project](hardware/kicad/rc-car.kicad_pro)
+- [LTspice circuit](hardware/ltspice/battery-indicator.asc)
+
 
 ## My Contribution
 
@@ -170,13 +168,6 @@ My contribution included:
 - Add live camera streaming
 - Add additional sensors
 - Add autonomous driving functionality
-
-## Project Files
-
-- `src/` — Arduino firmware
-- `hardware/kicad/` — PCB design
-- `hardware/ltspice/` — analog circuit simulation
-- `images/` — project documentation images
 
 ## Authors
 
